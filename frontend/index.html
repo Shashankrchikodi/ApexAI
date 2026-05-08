@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ApexAI — Executive Intelligence Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:       #0d0f14;
+    --ink-2:     #13161e;
+    --ink-3:     #1c2030;
+    --border:    #252a38;
+    --border-2:  #2e3548;
+    --muted:     #4a5270;
+    --dim:       #7a85a8;
+    --body:      #b0bcd8;
+    --bright:    #dce5f5;
+    --white:     #f0f4ff;
+    --gold:      #c8a96e;
+    --gold-2:    #e8c98a;
+    --gold-dim:  #6b5530;
+    --amber:     #d4874a;
+    --red:       #c94f4f;
+    --green:     #4a9e7c;
+    --blue:      #4a7ec9;
+    --r:         4px;
+    --r-lg:      8px;
+    --r-xl:      12px;
+  }
+
+  html, body { height: 100%; overflow: hidden; background: var(--ink); color: var(--body); }
+  body { font-family: 'Syne', sans-serif; font-size: 13px; display: flex; flex-direction: column; }
+
+  /* ── HEADER ── */
+  header {
+    height: 52px; min-height: 52px;
+    background: var(--ink-2);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 20px;
+    gap: 16px;
+    position: relative;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--white);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-mark {
+    width: 26px; height: 26px;
+    background: var(--gold);
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .logo span { color: var(--gold); font-style: italic; }
+
+  .header-center { flex: 1; display: flex; justify-content: center; }
+  .stage-track {
+    display: flex; align-items: center; gap: 0;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .stage-item {
+    padding: 4px 10px;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: var(--r);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .stage-item:hover { color: var(--dim); }
+  .stage-item.active { color: var(--gold); }
+  .stage-dot { width: 12px; height: 1px; background: var(--border-2); }
+
+  .header-right { display: flex; align-items: center; gap: 8px; }
+  .badge {
+    padding: 3px 8px;
+    border-radius: 99px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .badge-gold { background: var(--gold-dim); color: var(--gold-2); }
+  .badge-green { background: rgba(74,158,124,0.15); color: var(--green); }
+  .badge-red { background: rgba(201,79,79,0.15); color: var(--red); }
+
+  .btn {
+    padding: 6px 14px;
+    border-radius: var(--r);
+    border: none;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .btn-ghost { background: transparent; color: var(--dim); border: 1px solid var(--border-2); }
+  .btn-ghost:hover { color: var(--bright); border-color: var(--muted); }
+  .btn-gold { background: var(--gold); color: var(--ink); }
+  .btn-gold:hover { background: var(--gold-2); }
+  .btn-sm { padding: 4px 10px; font-size: 10px; }
+
+  /* ── LAYOUT ── */
+  .workspace {
+    flex: 1; display: flex; overflow: hidden;
+    min-height: 0;
+  }
+
+  /* ── LEFT SIDEBAR ── */
+  .sidebar {
+    width: 240px; min-width: 240px;
+    background: var(--ink-2);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+
+  .sidebar-section { padding: 16px; border-bottom: 1px solid var(--border); }
+  .sidebar-label {
+    font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px; font-weight: 700;
+  }
+
+  .engagement-list { flex: 1; overflow-y: auto; padding: 8px; }
+  .engagement-card {
+    padding: 10px 12px;
+    border-radius: var(--r-lg);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 4px;
+    border: 1px solid transparent;
+  }
+  .engagement-card:hover { background: var(--ink-3); border-color: var(--border); }
+  .engagement-card.active { background: var(--ink-3); border-color: var(--gold-dim); }
+  .eng-codename {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px; font-weight: 600;
+    color: var(--bright); margin-bottom: 2px;
+  }
+  .eng-role { font-size: 11px; color: var(--dim); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .eng-meta { display: flex; align-items: center; justify-content: space-between; }
+  .eng-stage { font-size: 9px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.1em; }
+  .eng-date { font-size: 9px; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+  .new-eng-form { padding: 12px; }
+  .field-row { margin-bottom: 8px; }
+  .field-label { font-size: 10px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .field-input {
+    width: 100%;
+    background: var(--ink-3);
+    border: 1px solid var(--border-2);
+    border-radius: var(--r);
+    padding: 6px 10px;
+    color: var(--bright);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .field-input:focus { border-color: var(--gold); }
+  .field-input::placeholder { color: var(--muted); }
+
+  /* ── AGENT PANEL ── */
+  .agent-panel {
+    width: 180px; min-width: 180px;
+    background: var(--ink);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .agent-panel-header { padding: 16px 12px 10px; border-bottom: 1px solid var(--border); }
+  .agent-list { flex: 1; overflow-y: auto; padding: 6px; }
+  .agent-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px;
+    border-radius: var(--r-lg);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 2px;
+    border: 1px solid transparent;
+    width: 100%; text-align: left;
+    background: none;
+    font-family: 'Syne', sans-serif;
+  }
+  .agent-btn:hover { background: var(--ink-2); border-color: var(--border); }
+  .agent-btn.active { background: var(--ink-3); border-color: var(--gold-dim); }
+  .agent-icon {
+    width: 26px; height: 26px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+    background: var(--ink-3);
+  }
+  .agent-btn.active .agent-icon { background: var(--gold-dim); }
+  .agent-info { flex: 1; min-width: 0; }
+  .agent-name { font-size: 11px; font-weight: 600; color: var(--bright); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .agent-stage-label { font-size: 9px; color: var(--muted); letter-spacing: 0.04em; }
+
+  /* ── MAIN CHAT ── */
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+  .chat-header {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+    background: var(--ink);
+  }
+  .chat-header-info { flex: 1; }
+  .chat-title { font-size: 14px; font-weight: 700; color: var(--white); }
+  .chat-subtitle { font-size: 11px; color: var(--dim); }
+
+  .chat-messages {
+    flex: 1; overflow-y: auto;
+    padding: 20px;
+    display: flex; flex-direction: column; gap: 16px;
+    scroll-behavior: smooth;
+  }
+
+  .msg {
+    display: flex; gap: 12px; max-width: 100%;
+    animation: msgIn 0.25s ease;
+  }
+  @keyframes msgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .msg-avatar {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .msg-avatar.user { background: var(--blue); }
+  .msg-avatar.agent { background: var(--gold-dim); }
+
+  .msg-body { flex: 1; min-width: 0; }
+  .msg-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .msg-sender { font-size: 11px; font-weight: 700; color: var(--bright); letter-spacing: 0.04em; }
+  .msg-time { font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .msg-badge { font-size: 9px; padding: 1px 6px; border-radius: 3px; }
+
+  .msg-content {
+    background: var(--ink-2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-xl);
+    padding: 14px 16px;
+    color: var(--body);
+    line-height: 1.7;
+    font-size: 13px;
+  }
+  .msg.user .msg-content {
+    background: var(--ink-3);
+    border-color: var(--border-2);
+    color: var(--bright);
+  }
+
+  .msg-content h2 { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--white); margin: 12px 0 6px; font-weight: 400; }
+  .msg-content h3 { font-size: 12px; font-weight: 700; color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase; margin: 10px 0 4px; }
+  .msg-content strong { color: var(--bright); font-weight: 700; }
+  .msg-content em { color: var(--gold); font-style: italic; }
+  .msg-content code { font-family: 'DM Mono', monospace; font-size: 11px; background: var(--ink-3); padding: 1px 5px; border-radius: 3px; color: var(--gold-2); }
+  .msg-content ul, .msg-content ol { padding-left: 18px; margin: 6px 0; }
+  .msg-content li { margin-bottom: 3px; }
+
+  .tool-call-card {
+    background: var(--ink);
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--gold-dim);
+    border-radius: var(--r-lg);
+    padding: 10px 14px;
+    margin: 8px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+  }
+  .tool-call-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .tool-icon { font-size: 12px; }
+  .tool-name { color: var(--gold); font-weight: 500; }
+  .tool-result { color: var(--dim); }
+
+  /* Streaming cursor */
+  .cursor { display: inline-block; width: 2px; height: 14px; background: var(--gold); margin-left: 2px; animation: blink 1s infinite; vertical-align: middle; }
+  @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+  /* ── INPUT ── */
+  .chat-input-area {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--ink);
+  }
+  .input-row { display: flex; gap: 10px; align-items: flex-end; }
+  .chat-textarea {
+    flex: 1;
+    background: var(--ink-2);
+    border: 1px solid var(--border-2);
+    border-radius: var(--r-xl);
+    padding: 12px 16px;
+    color: var(--bright);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    resize: none;
+    outline: none;
+    max-height: 140px;
+    min-height: 44px;
+    line-height: 1.5;
+    transition: border-color 0.2s;
+  }
+  .chat-textarea:focus { border-color: var(--gold); }
+  .chat-textarea::placeholder { color: var(--muted); }
+
+  .send-btn {
+    width: 44px; height: 44px;
+    border-radius: var(--r-xl);
+    background: var(--gold);
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    color: var(--ink);
+  }
+  .send-btn:hover { background: var(--gold-2); transform: scale(1.05); }
+  .send-btn:disabled { background: var(--border-2); color: var(--muted); cursor: default; transform: none; }
+
+  .quick-prompts { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .qp-btn {
+    padding: 4px 10px;
+    background: var(--ink-2);
+    border: 1px solid var(--border-2);
+    border-radius: 99px;
+    color: var(--dim);
+    font-size: 10px;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .qp-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+  /* ── RIGHT PANEL ── */
+  .right-panel {
+    width: 260px; min-width: 260px;
+    background: var(--ink-2);
+    border-left: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .rp-header { padding: 16px 14px 10px; border-bottom: 1px solid var(--border); }
+  .rp-body { flex: 1; overflow-y: auto; padding: 12px; }
+
+  .info-block { margin-bottom: 16px; }
+  .info-label { font-size: 9px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; font-weight: 700; }
+  .info-value { font-size: 12px; color: var(--bright); }
+
+  .pipeline-stages { display: flex; flex-direction: column; gap: 4px; }
+  .ps-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 10px;
+    border-radius: var(--r);
+    transition: all 0.15s;
+  }
+  .ps-item.done { background: rgba(74,158,124,0.08); }
+  .ps-item.active-stage { background: rgba(200,169,110,0.08); }
+  .ps-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .ps-dot.done { background: var(--green); }
+  .ps-dot.active { background: var(--gold); }
+  .ps-dot.pending { background: var(--border-2); }
+  .ps-name { font-size: 11px; flex: 1; }
+  .ps-item.done .ps-name { color: var(--dim); }
+  .ps-item.active-stage .ps-name { color: var(--gold); font-weight: 600; }
+  .ps-item:not(.done):not(.active-stage) .ps-name { color: var(--muted); }
+
+  .audit-list { display: flex; flex-direction: column; gap: 4px; }
+  .audit-item {
+    padding: 6px 8px;
+    background: var(--ink);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+  }
+  .audit-item span { color: var(--gold); }
+
+  /* ── MODALS ── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .modal {
+    background: var(--ink-2);
+    border: 1px solid var(--border-2);
+    border-radius: var(--r-xl);
+    padding: 28px;
+    width: 440px; max-width: 90vw;
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--white); margin-bottom: 4px; }
+  .modal-sub { font-size: 11px; color: var(--dim); margin-bottom: 24px; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 12px; color: var(--muted); text-align: center; padding: 40px;
+  }
+  .empty-icon { font-size: 40px; opacity: 0.4; }
+  .empty-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--dim); }
+  .empty-body { font-size: 12px; line-height: 1.6; max-width: 300px; }
+
+  /* ── TOAST ── */
+  .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 8px; }
+  .toast {
+    background: var(--ink-2);
+    border: 1px solid var(--border-2);
+    border-radius: var(--r-lg);
+    padding: 10px 16px;
+    font-size: 12px; color: var(--bright);
+    animation: toastIn 0.3s ease;
+    display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: none; opacity: 1; } }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-mark"></div>
+    Apex<span>AI</span>
+  </div>
+
+  <div class="header-center">
+    <div class="stage-track" id="stageTrack"></div>
+  </div>
+
+  <div class="header-right">
+    <span class="badge badge-gold" id="engagementBadge">No Engagement</span>
+    <button class="btn btn-ghost btn-sm" onclick="openNewEngagement()">+ New Search</button>
+  </div>
+</header>
+
+<!-- WORKSPACE -->
+<div class="workspace">
+
+  <!-- SIDEBAR: Engagements -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Active Searches</div>
+    </div>
+    <div class="engagement-list" id="engagementList">
+      <div class="empty-state" style="padding:20px;font-size:11px;color:var(--muted);">
+        No searches yet.<br>Click <strong style="color:var(--gold)">+ New Search</strong> to begin.
+      </div>
+    </div>
+  </div>
+
+  <!-- AGENT PANEL -->
+  <div class="agent-panel">
+    <div class="agent-panel-header">
+      <div class="sidebar-label">Agents</div>
+    </div>
+    <div class="agent-list" id="agentList"></div>
+  </div>
+
+  <!-- MAIN CHAT -->
+  <div class="main">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <div class="chat-title" id="chatTitle">Select an engagement to begin</div>
+        <div class="chat-subtitle" id="chatSubtitle">ApexAI Executive Intelligence Platform</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="clearChat()">Clear</button>
+      <button class="btn btn-ghost btn-sm" onclick="showAuditLog()">Audit Log</button>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+      <div class="empty-state">
+        <div class="empty-icon">◈</div>
+        <div class="empty-title">Executive Intelligence, Activated</div>
+        <div class="empty-body">
+          Create or select an engagement from the sidebar, choose a specialist agent, and begin your retained search.
+          All outputs require human consultant approval before sending.
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <div class="quick-prompts" id="quickPrompts"></div>
+      <div class="input-row">
+        <textarea class="chat-textarea" id="chatInput"
+          placeholder="Describe the mandate, upload a transcript, or ask an agent..."
+          rows="1"
+          onkeydown="handleKey(event)"
+          oninput="autoResize(this)"></textarea>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()">→</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="rp-header">
+      <div class="sidebar-label">Engagement Intel</div>
+    </div>
+    <div class="rp-body" id="rightPanel">
+      <div class="info-block">
+        <div class="info-label">Pipeline Stage</div>
+        <div class="pipeline-stages" id="pipelineStages">
+          <div style="font-size:11px;color:var(--muted)">No active engagement</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="newEngModal" style="display:none">
+  <div class="modal">
+    <div class="modal-title">New Executive Search</div>
+    <div class="modal-sub">Configure the retained search engagement</div>
+    <div class="field-row">
+      <div class="field-label">Client Name</div>
+      <input class="field-input" id="f-client" placeholder="e.g. Meridian Capital Partners" />
+    </div>
+    <div class="field-row">
+      <div class="field-label">Role Title</div>
+      <input class="field-input" id="f-role" placeholder="e.g. Chief Financial Officer" />
+    </div>
+    <div class="field-row">
+      <div class="field-label">Codename (confidential)</div>
+      <input class="field-input" id="f-code" placeholder="e.g. Project Polaris" />
+    </div>
+    <div class="field-row">
+      <div class="field-label">Jurisdictions</div>
+      <input class="field-input" id="f-jur" placeholder="US-FED, EU, US-NYC, US-CO..." value="US-FED" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('newEngModal')">Cancel</button>
+      <button class="btn btn-gold" onclick="createEngagement()">Launch Search</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="auditModal" style="display:none">
+  <div class="modal" style="width:580px;max-height:70vh;display:flex;flex-direction:column;">
+    <div class="modal-title">Audit Log</div>
+    <div class="modal-sub">Immutable record of all AI-generated outputs</div>
+    <div style="flex:1;overflow-y:auto;margin:0 -4px;padding:0 4px;" id="auditModalContent"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('auditModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ── State ─────────────────────────────────────────────────────────────
+const API = '';
+let state = {
+  engagement: null,
+  agent: 'ORCHESTRATOR',
+  history: [],
+  streaming: false,
+  auditLog: [],
+};
+
+const STAGES = ['INTAKE','SPEC','MAP','SOURCE','OUTREACH','ASSESS','PRESENT','REFERENCE','OFFER','ONBOARD'];
+const STAGE_LABELS = {
+  INTAKE:'Intake', SPEC:'Position Spec', MAP:'Market Map',
+  SOURCE:'Sourcing', OUTREACH:'Outreach', ASSESS:'Assessment',
+  PRESENT:'Submission', REFERENCE:'Reference', OFFER:'Offer',
+  ONBOARD:'Onboarding'
+};
+
+const AGENTS = [
+  { id:'ORCHESTRATOR', icon:'◈', name:'Orchestrator', stage:'All Stages' },
+  { id:'INTAKE',       icon:'📋', name:'Intake',       stage:'Kickoff' },
+  { id:'POSITION_SPEC',icon:'📄', name:'Position Spec',stage:'Spec' },
+  { id:'MARKET_MAPPER',icon:'🗺️', name:'Market Mapper', stage:'Mapping' },
+  { id:'SOURCING',     icon:'🔍', name:'Sourcing',      stage:'Enrichment' },
+  { id:'OUTREACH',     icon:'✉️', name:'Outreach',      stage:'Outreach' },
+  { id:'ASSESSMENT',   icon:'📊', name:'Assessment',    stage:'Interviews' },
+  { id:'SUBMISSION',   icon:'📑', name:'Submission',    stage:'Presentation' },
+  { id:'REFERENCE',    icon:'🤝', name:'Reference',     stage:'Reference' },
+  { id:'OFFER_COMP',   icon:'💰', name:'Offer & Comp',  stage:'Offer' },
+  { id:'ONBOARDING',   icon:'🚀', name:'Onboarding',    stage:'Post-Place' },
+  { id:'COMPLIANCE',   icon:'⚖️', name:'Compliance',    stage:'All Stages' },
+];
+
+const QUICK_PROMPTS = {
+  ORCHESTRATOR: ['Kick off a new search', 'What\'s the status?', 'Generate a progress report'],
+  INTAKE: ['Convert this JD into a success profile', 'What are The Real Four?', 'Flag compliance issues'],
+  POSITION_SPEC: ['Write the position specification', 'Draft the Leadership Challenges', 'Make it more candid'],
+  MARKET_MAPPER: ['Map the target universe', 'List 20 target companies', 'Find hidden talent sources'],
+  SOURCING: ['Enrich this candidate profile', 'Surface compensation signals', 'Identify warm intro pathways'],
+  OUTREACH: ['Draft a 3-touch sequence', 'Write a warm intro request', 'Make Touch 1 more specific'],
+  ASSESSMENT: ['Build an interview kit', 'Synthesize the transcript', 'Design the scorecard rubric'],
+  SUBMISSION: ['Generate the client submission', 'Draft Areas to Explore', 'Format for presentation'],
+  REFERENCE: ['Design reference questions', 'Synthesize the calls', 'Flag conspicuous silences'],
+  OFFER_COMP: ['Benchmark compensation', 'Model the offer structure', 'Identify negotiation risks'],
+  ONBOARDING: ['Generate 30/60/90-day cadence', 'Draft Day-30 check-ins', 'Flag early warning signals'],
+  COMPLIANCE: ['Run a compliance check', 'What jurisdictions apply?', 'Check for protected-class inference'],
+};
+
+// Demo responses by agent
+const DEMO_RESPONSES = {
+  ORCHESTRATOR: `📊 STATUS: New CFO engagement launched successfully
+✅ OUTPUT:
+**Project ${randomCodename()} is now active**
+- Client: ${state.engagement?.client_name || 'TechCorp'}
+- Role: ${state.engagement?.role_title || 'Chief Financial Officer'}
+- Current Stage: INTAKE
+
+**Next Steps:**
+1. Schedule intake call with hiring manager
+2. Develop position specification
+3. Build initial market map
+
+**Progress:** Ready to begin sourcing phase`,
+
+  INTAKE: `**SUCCESS PROFILE: CFO Search**
+
+## The Real Four
+
+### 1. THE HIRING PROBLEM
+Post-IPO financial infrastructure rebuild. Previous CFO transitioned to Chief Investment Officer role. Need hands-on operator to stabilize accounting, implement FP&A tooling, and establish board reporting cadence.
+
+### 2. THE 90-DAY WIN
+- Completed month-end close cycle with board-ready reporting
+- FP&A dashboard live covering monthly/quarterly performance
+- Audit prep initiated with clean preliminary findings
+
+### 3. LEADERSHIP DNA
+- **Financial Rigor** — Has lived through pre-audit close; obsessed with GL integrity
+- **Board Interface** — Comfortable presenting to institutional investors; no hand-holding
+- **Transformational** — Built accounting team from scratch; scaled 3+ times
+- **Technology-First** — Implemented (not managed) HRIS, GL, reporting systems
+- **Decisive** — Makes tough vendor/process decisions with incomplete data
+
+### 4. COMPENSATION FRAME
+- Base: $280K–$320K (p25–p75 for post-IPO growth)
+- Target Bonus: 40–50% (tied to GAAP margins + cash conversion)
+- LTI: $600K–$800K (RSU vesting 4-year, 25% cliff)
+- **Total: $980K–$1.12M**`,
+
+  POSITION_SPEC: `# Position Specification: Chief Financial Officer
+
+## The Opportunity
+
+You will lead the financial strategy for a rapidly scaling B2B SaaS platform that just completed its Series C and is preparing for IPO within 18 months. You own the P&L, quarterly planning, capital allocation, and board relationships. You will work closely with the CEO and Board to define post-IPO financial infrastructure.
+
+## The Company Context
+
+15-year-old profitable SaaS company, currently $45M ARR, 60% YoY growth. 240 employees across US and EU. Customer concentration: top 3 account for 18% of revenue. Gross margin: 72%. Engineering-heavy culture; finance has historically been operational.
+
+## The Mandate
+
+1. **Month-End Close:** Establish clean GL, automate close cycle, deliver board-ready reporting within 5 business days
+2. **FP&A Architecture:** Build forecast-to-actuals cadence; design dashboard for monthly planning
+3. **Audit Preparation:** Select Big 4 firm, implement SOX-readiness; pass preliminary audit clean
+4. **Capital Efficiency:** Model $200M+ post-IPO raise scenarios; optimize tax structure
+
+## The Leadership Challenges (Candor)
+
+- **No Finance Culture:** CFO role didn't exist 2 years ago. You'll need to build accounting team, train ops leaders on financial discipline, and resist romanticizing "startup speed"
+- **Board Expectations Shifting:** Investors are growing impatient; they want predictability, not heroics. You'll face uncomfortable conversations about aggressive bookings recognition
+- **Technical Debt:** GL has grown organically; duplicate GL codes, no revenue recognition rules engine. Rip-and-replace required.
+
+## The Ideal Background
+
+- 12+ years in finance; 3+ as VP Finance or CFO (post-IPO growth stage preferred)
+- Built FP&A from scratch; comfortable with Workday, Anaplan, or Tableau
+- Big 4 audit experience or previous IPO navigation
+- Comfortable in ambiguity; thrives with incomplete data
+- Board-ready communication style`,
+
+  MARKET_MAPPER: `## Target Universe
+
+### Tier 1 — Direct Competitors (VP Finance → CFO)
+1. **Figma** — Strong finance culture; CFO Lisa Schiff known for rigor
+2. **Notion** — Faster growth profile; likely building FP&A now
+3. **Stripe** — Lost 2 CFOs; may have internal promotion pipeline
+4. **Amplitude** — Recent IPO; likely seeking second-in-command
+
+### Tier 2 — Adjacent Ecosystems
+5. **Brex** — Fintech culture; may have displaced finance talent
+6. **Monday.com** — Recent IPO; likely open to new blood
+7. **Datadog** — Aggressive growth; historically high CFO turnover
+8. **Cloudflare** — Public company; board-ready executives
+
+### Target Roles
+- VP Finance (looking to step into CFO)
+- Corporate Controller (pre-CFO role)
+- Finance Director at public companies
+- FP&A Manager at hypergrowth startups
+
+### Candidate Heat Map
+🔥 **HOT** — VP Finance at growth-stage SaaS, frustrated with lack of board access
+🟠 **WARM** — Controller at public company, open to startup upside
+❄️ **COLD** — Active CFOs (unlikely movers in next 6 months)`,
+
+  SOURCING: `## Enriched Candidate Profile
+
+**Name:** Alex Chen  
+**Current Role:** VP Finance, Databricks  
+**Career Ladder:**
+- 2022–Present: VP Finance @ Databricks ($200M ARR, 7,500 emp)
+  - Scope: $200M+ P&L, 12-person team, IPO prep
+  - Outcomes: Implemented NetSuite consolidation, reduced close cycle 40%
+  
+- 2019–2022: Senior Manager, FP&A @ Brex ($8B valuation)
+  - Scope: Cross-functional forecasting, 6-person team
+  - Outcomes: Built forecast model, 2% variance to actuals
+  
+- 2016–2019: Financial Analyst → Senior Analyst @ Deloitte Consulting
+  - Scope: Post-acquisition integration, IPO readiness
+  - Outcomes: Led 3 tech IPO readiness reviews
+
+**Measurable Outcomes:**
+- Reduced month-end close from 15 days → 8 days
+- Built FP&A dashboard (Tableau) reducing ad-hoc reporting 70%
+- Guided 2 successful audits with zero findings
+
+**Compensation Signals:**
+- Current TC: ~$450K (base $250K, bonus 40%, RSU ~$200K)
+- Expected: $900K–$1.1M range
+- Mobility: Open to CFO-track role; ready to move in Q3
+
+**Risk Flags:** None identified. Strong trajectory. Likely to get multiple offers.`,
+
+  OUTREACH: `## 3-Touch Outreach Sequence
+
+### TOUCH 1 (Day 1) — Evidence-Anchored Hook
+**Subject:** "Databricks + SaaS CFO fit? 🔗"
+
+Hi Alex,
+
+I noticed you led Databricks' FP&A transformation while managing pre-IPO close complexity. That exact combination is rare — most CFOs are either operators *or* strategists.
+
+We're working on behalf of a $45M ARR SaaS company in the customer data space (think: Databricks adjacency) that's 18 months from IPO. They need someone who's already lived that movie.
+
+Would you be open to a 15-minute exploratory call? No pitch — just a conversation about whether this fits your next move.
+
+Best,  
+[Your Name]  
+Executive Search
+
+---
+
+### TOUCH 2 (Day 5) — Market Context
+**Subject:** Re: Databricks + SaaS CFO fit?
+
+Added context: Post-Series C SaaS CFO roles are commanding $900K–$1.2M TC + board seat. Equity upside is material if IPO materializes.
+
+---
+
+### TOUCH 3 (Day 12) — Polite Close
+**Subject:** Last thought on the SaaS CFO role
+
+If timing isn't right now, happy to revisit in 6 months. But wanted to surface this while our client is actively interviewing.
+
+Best,  
+[Your Name]`,
+
+  ASSESSMENT: `## Interview Kit — CFO Round 1
+
+### Focus Competencies
+1. **Financial Rigor** — GL ownership, close discipline
+2. **Board Interface** — Investor communication
+3. **FP&A Architecture** — Data-driven planning
+4. **Team Building** — Building finance function from scratch
+
+### STAR-Format Questions
+
+**Q1: Close Cycle** — "Walk me through the last month-end close you owned. What was going wrong? How did you fix it?"
+
+**Q2: Board Conflict** — "Tell me about a time you disagreed with your CEO on a financial decision. How did you handle it?"
+
+**Q3: Systems Implementation** — "Describe the most complex system rollout you've led. What went wrong?"
+
+### Scorecard Rubric
+- **Rigor:** 1–5 (Does they obsess over GL integrity?)
+- **Communication:** 1–5 (Can they explain financial concepts to non-finance people?)
+- **Problem-Solving:** 1–5 (Do they solve problems analytically or reactively?)
+
+### Next Round Trigger
+If candidate scores 4+ on Rigor and Communication → Advance to Round 2 with CEO`,
+
+  SUBMISSION: `## Client Submission
+
+**ALEX CHEN — VP Finance, Databricks**
+
+### Why This Candidate Fits
+
+✓ **Board-Ready** — Led pre-IPO close at Databricks; comfortable with Big 4 audits
+✓ **FP&A Architecture** — Built forecast model at Brex with 2% variance; implemented Tableau dashboard
+✓ **Team Builder** — Scaled finance team 3x; known for rigorous talent standards
+
+### Career Narrative
+
+Alex started at Deloitte Consulting where she led post-acquisition integration and IPO readiness reviews. She witnessed 3 successful tech IPOs and learned the guardrails. She then moved to Brex (Series B, $8B valuation) where she built the entire FP&A function from scratch — forecast model, headcount planning, investor reporting. The model achieved 2% actuals variance over 3 years, rare in hypergrowth. 
+
+Most recently, Alex moved to Databricks (Series E, $200M ARR) as VP Finance. In 18 months, she reduced the month-end close from 15 days to 8 days, implemented a complete GL consolidation via NetSuite, and built a board-ready dashboard that reduced ad-hoc reporting 70%. She's seen unicorn finance up close.
+
+### Areas to Explore
+
+• Why leave Databricks now vs. waiting for IPO window?
+• Prior compensation expectations and equity upside sensitivity?
+• Geographic flexibility (willing to relocate)?`,
+
+  REFERENCE: `## Reference Call Synthesis
+
+**REF 1: Former CEO at Brex**
+- "Alex thinks like a CFO." Built forecasting discipline from nothing.
+- Cons: "Perfectionist; sometimes over-engineered solutions early."
+- **Net:** Strong technical skills; requires experienced leadership to channel
+
+**REF 2: Audit Partner, Deloitte**
+- "She's one of the best FP&A builders I've worked with." Clean audits, every time.
+- **Confidence:** HIGH
+
+**REF 3: CEO, Databricks**
+- Enthusiastic recommender. Wanted her to stay through IPO but understands CFO ambitions.
+- **Net:** Ready to move; culture fit is strong`,
+
+  OFFER_COMP: `## Compensation & Offer Structure
+
+### Market Benchmark (Post-Series C SaaS, $45M ARR)
+- Base: $280K–$320K (p50)
+- Bonus: 40–50% (LTI: $600K–$800K)
+- **Total TC: $980K–$1.12M**
+
+### Candidate-Specific Frame
+- Current TC: ~$450K (underlevered for CFO role)
+- "Yes" comp: $950K–$1.1M
+- Sign-on: $100K (account for Databricks RSU cliff)
+
+### Proposed Offer
+- Base: $300K
+- Target Bonus: 45% ($135K)
+- LTI: $650K (RSU, 4-year vest, 25% cliff)
+- **Total Year 1: $1.085M**
+
+### Negotiation Risks
+1. **Equity Dilution** — Candidate may push for larger equity pool
+2. **Deferred Comp** — May negotiate higher % in RSU vs. cash
+3. **Board Seat** — May require board observer rights`,
+
+  ONBOARDING: `## 30/60/90-Day Cadence
+
+### Day 30 Checkpoint
+- GL reconciliation complete; no surprises
+- Close cycle operating at <8 days
+- Finance team introductions & cross-functional kickoff
+- **To Candidate:** "Anything blocking you from the 90-day win?"
+
+### Day 60 Checkpoint
+- FP&A dashboard in beta; board prepped to see it
+- Audit plan finalized with Big 4
+- Board reporting template live
+- **To Client:** "Any course corrections?"
+
+### Day 90 Checkpoint
+- Month-end close completed 2 months in a row <8 days ✓
+- Board presentation delivered ✓
+- Audit prep initiated; preliminary findings clean ✓
+- **Joint Reflection:** "What worked? What didn't?"
+
+### Day 180 Checkpoint
+- IPO prep roadmap finalized
+- Finance team scaled to support pre-IPO rigor
+- CEO confidence in CFO relationship evident
+- **NPS Check:** Would you hire this person again? 1–10`,
+
+  COMPLIANCE: `## Compliance Review
+
+### Verdict: **APPROVED**
+
+✅ **No protected-class inference** — All claims tied to verifiable job outcomes
+✅ **GDPR-compliant** — No sensitive personal data; candidate name can be redacted for client submission
+✅ **EEOC Title VII** — No age, gender, race, national origin implications
+✅ **NYC LL144 ready** — Independent bias audit complete
+
+### Jurisdictional Checks (US-FED, EU)
+- FCRA compliant — No background check performed without consent
+- GDPR data-processing notice: ✓
+- Candidate rights notice: ✓
+
+### Sign-Off
+Approved for client presentation and outreach.`,
+};
+
+// ── Init ─────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderAgentList();
+  renderStageTrack();
+  selectAgent('ORCHESTRATOR');
+  loadDemo();
+});
+
+function renderAgentList() {
+  const el = document.getElementById('agentList');
+  el.innerHTML = AGENTS.map(a => `
+    <button class="agent-btn ${state.agent === a.id ? 'active' : ''}"
+            id="agent-btn-${a.id}" onclick="selectAgent('${a.id}')">
+      <div class="agent-icon">${a.icon}</div>
+      <div class="agent-info">
+        <div class="agent-name">${a.name}</div>
+        <div class="agent-stage-label">${a.stage}</div>
+      </div>
+    </button>
+  `).join('');
+}
+
+function renderStageTrack() {
+  const currentStage = state.engagement?.current_stage || 'INTAKE';
+  const el = document.getElementById('stageTrack');
+  el.innerHTML = STAGES.map((s, i) => `
+    ${i > 0 ? '<div class="stage-dot"></div>' : ''}
+    <div class="stage-item ${s === currentStage ? 'active' : ''}">${STAGE_LABELS[s]}</div>
+  `).join('');
+}
+
+function renderPipeline() {
+  const currentStage = state.engagement?.current_stage || 'INTAKE';
+  const idx = STAGES.indexOf(currentStage);
+  const el = document.getElementById('pipelineStages');
+  el.innerHTML = STAGES.map((s, i) => {
+    const cls = i < idx ? 'done' : i === idx ? 'active-stage' : '';
+    const dotCls = i < idx ? 'done' : i === idx ? 'active' : 'pending';
+    return `<div class="ps-item ${cls}">
+      <div class="ps-dot ${dotCls}"></div>
+      <div class="ps-name">${STAGE_LABELS[s]}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectAgent(agentId) {
+  state.agent = agentId;
+  renderAgentList();
+  updateQuickPrompts();
+  const a = AGENTS.find(x => x.id === agentId);
+  const sub = document.getElementById('chatSubtitle');
+  if (sub) sub.textContent = `${a.name} Agent — ${a.stage}`;
+}
+
+function updateQuickPrompts() {
+  const el = document.getElementById('quickPrompts');
+  const prompts = QUICK_PROMPTS[state.agent] || [];
+  el.innerHTML = prompts.map(p => `
+    <button class="qp-btn" onclick="usePrompt(${JSON.stringify(p)})">${p}</button>
+  `).join('');
+}
+
+function usePrompt(text) {
+  document.getElementById('chatInput').value = text;
+  autoResize(document.getElementById('chatInput'));
+}
+
+// ── Engagements ───────────────────────────────────────────────────────
+function renderEngagementList(engagements) {
+  const el = document.getElementById('engagementList');
+  if (!engagements || !engagements.length) {
+    el.innerHTML = `<div style="padding:16px;font-size:11px;color:var(--muted);text-align:center;">
+      No searches yet.<br>Click <strong style="color:var(--gold)">+ New Search</strong> to begin.
+    </div>`;
+    return;
+  }
+  el.innerHTML = engagements.map(e => `
+    <div class="engagement-card ${state.engagement?.engagement_id === e.engagement_id ? 'active' : ''}"
+         onclick="selectEngagement(${JSON.stringify(e).replace(/"/g, '&quot;')})">
+      <div class="eng-codename">${e.codename}</div>
+      <div class="eng-role">${e.role_title}</div>
+      <div class="eng-meta">
+        <span class="eng-stage">${e.current_stage}</span>
+        <span class="eng-date">${formatDate(e.created_at)}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectEngagement(eng) {
+  state.engagement = eng;
+  state.history = [];
+  document.getElementById('chatTitle').textContent = `${eng.codename} — ${eng.role_title}`;
+  document.getElementById('chatSubtitle').textContent = eng.client_name;
+  document.getElementById('engagementBadge').textContent = eng.codename;
+  document.getElementById('chatMessages').innerHTML = '';
+  renderStageTrack();
+  renderPipeline();
+  updateRightPanel(eng);
+  addSystemMsg(`Engagement **${eng.codename}** loaded. Searching for a **${eng.role_title}** at **${eng.client_name}**.\n\nActive jurisdictions: ${(eng.jurisdictions || ['US-FED']).join(', ')}.`);
+}
+
+function updateRightPanel(eng) {
+  const rp = document.getElementById('rightPanel');
+  renderPipeline();
+  const infoHTML = `
+    <div class="info-block" id="pipelineBlock">
+      <div class="info-label">Pipeline Stage</div>
+      <div class="pipeline-stages" id="pipelineStages"></div>
+    </div>
+    <div class="info-block">
+      <div class="info-label">Engagement ID</div>
+      <div class="info-value" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--gold)">${eng.engagement_id}</div>
+    </div>
+    <div class="info-block">
+      <div class="info-label">Jurisdictions</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;">
+        ${(eng.jurisdictions || ['US-FED']).map(j => `<span class="badge badge-gold">${j}</span>`).join('')}
+      </div>
+    </div>
+    <div class="info-block">
+      <div class="info-label">Consultant</div>
+      <div class="info-value">${eng.consultant_name || 'Senior Consultant'}</div>
+    </div>
+    <div class="info-block">
+      <div class="info-label">Recent Actions</div>
+      <div class="audit-list" id="recentAudit">
+        <div class="audit-item"><span>✓</span> Engagement created</div>
+      </div>
+    </div>
+  `;
+  rp.innerHTML = infoHTML;
+  renderPipeline();
+}
+
+function openNewEngagement() {
+  const names = ['Polaris','Meridian','Apex','Solstice','Zenith','Orion','Cassini','Atlas','Vega','Sirius'];
+  document.getElementById('f-code').value = 'Project ' + names[Math.floor(Math.random() * names.length)];
+  document.getElementById('newEngModal').style.display = 'flex';
+}
+
+function randomCodename() {
+  const names = ['Polaris','Meridian','Apex','Solstice','Zenith','Orion','Cassini','Atlas','Vega','Sirius'];
+  return 'Project ' + names[Math.floor(Math.random() * names.length)];
+}
+
+function createEngagement() {
+  const client = document.getElementById('f-client').value.trim();
+  const role = document.getElementById('f-role').value.trim();
+  const code = document.getElementById('f-code').value.trim();
+  const jur = document.getElementById('f-jur').value.split(',').map(s => s.trim()).filter(Boolean);
+
+  if (!client || !role || !code) { 
+    toast('Please fill all required fields', 'error'); 
+    return; 
+  }
+
+  const eng = {
+    engagement_id: Math.random().toString(36).slice(2,8).toUpperCase(),
+    client_name: client, 
+    role_title: role, 
+    codename: code,
+    jurisdictions: jur, 
+    current_stage: 'INTAKE',
+    consultant_name: 'Senior Consultant',
+    created_at: new Date().toISOString(),
+  };
+  
+  closeModal('newEngModal');
+  state.engagement = eng;
+  
+  const el = document.getElementById('engagementList');
+  el.innerHTML = `
+    <div class="engagement-card active" onclick="selectEngagement(${JSON.stringify(eng).replace(/"/g, '&quot;')})">
+      <div class="eng-codename">${eng.codename}</div>
+      <div class="eng-role">${eng.role_title}</div>
+      <div class="eng-meta">
+        <span class="eng-stage">${eng.current_stage}</span>
+        <span class="eng-date">${formatDate(eng.created_at)}</span>
+      </div>
+    </div>
+  `;
+  
+  selectEngagement(eng);
+  toast(`Search ${code} launched ✓`, 'success');
+}
+
+// ── Chat ─────────────────────────────────────────────────────────────
+function addSystemMsg(text) {
+  addMessage('agent', text, 'System', 'ORCHESTRATOR');
+}
+
+function addMessage(role, text, sender, agent) {
+  const msgs = document.getElementById('chatMessages');
+  const empty = msgs.querySelector('.empty-state');
+  if (empty) empty.remove();
+
+  const agentData = AGENTS.find(a => a.id === (agent || state.agent)) || AGENTS[0];
+  const avatarContent = role === 'user' ? '👤' : agentData.icon;
+  const avatarClass = role === 'user' ? 'user' : 'agent';
+  const senderName = role === 'user' ? 'You' : (sender || agentData.name);
+
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  div.innerHTML = `
+    <div class="msg-avatar ${avatarClass}">${avatarContent}</div>
+    <div class="msg-body">
+      <div class="msg-meta">
+        <span class="msg-sender">${senderName}</span>
+        <span class="msg-time">${formatTime()}</span>
+        ${role === 'agent' ? `<span class="badge badge-gold msg-badge">${agent || state.agent}</span>` : ''}
+      </div>
+      <div class="msg-content">${parseMarkdown(text)}</div>
+    </div>
+  `;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  
+  // Add to audit log
+  state.auditLog.push({
+    timestamp: new Date().toISOString(),
+    agent: agent || state.agent,
+    role: role,
+    sender: senderName,
+    message: text.slice(0, 100) + (text.length > 100 ? '...' : '')
+  });
+  
+  return div;
+}
+
+function parseMarkdown(text) {
+  let html = text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/`(.*?)`/g, '<code>$1</code>')
+    .replace(/###\s+(.*?)\n/g, '<h3>$1</h3>')
+    .replace(/##\s+(.*?)\n/g, '<h2>$1</h2>')
+    .replace(/\n/g, '<br>');
+  return html;
+}
+
+async function sendMessage() {
+  if (state.streaming) return;
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  if (!state.engagement) {
+    toast('Please create or select an engagement first', 'error');
+    return;
+  }
+
+  input.value = '';
+  autoResize(input);
+  addMessage('user', text, 'You');
+  state.history.push({ role: 'user', content: text });
+
+  state.streaming = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  // Simulate streaming with delay
+  setTimeout(() => {
+    const response = DEMO_RESPONSES[state.agent] || 'Processing your request...';
+    addMessage('agent', response, null, state.agent);
+    state.history.push({ role: 'assistant', content: response });
+    state.streaming = false;
+    document.getElementById('sendBtn').disabled = false;
+  }, 500);
+}
+
+function loadDemo() {
+  // Create a demo engagement for testing
+  const demoEng = {
+    engagement_id: 'DEMO001',
+    client_name: 'TechCorp Inc.',
+    role_title: 'Chief Financial Officer',
+    codename: 'Project Phoenix',
+    jurisdictions: ['US-FED', 'US-NYC'],
+    current_stage: 'INTAKE',
+    consultant_name: 'Sarah Mitchell',
+    created_at: new Date().toISOString(),
+  };
+  renderEngagementList([demoEng]);
+}
+
+function clearChat() {
+  if (!state.engagement) return;
+  document.getElementById('chatMessages').innerHTML = '';
+  state.history = [];
+  addSystemMsg(`Chat cleared. ${state.engagement.codename} is still active.`);
+}
+
+function showAuditLog() {
+  const content = document.getElementById('auditModalContent');
+  if (!state.auditLog || state.auditLog.length === 0) {
+    content.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted)">No audit entries yet</div>';
+  } else {
+    content.innerHTML = state.auditLog.map(e => `
+      <div class="audit-item">
+        <span>${e.timestamp.slice(11, 16)}</span> — ${e.agent} — ${e.sender}: ${e.message}
+      </div>
+    `).join('');
+  }
+  document.getElementById('auditModal').style.display = 'flex';
+}
+
+// ── Utilities ──────────────────────────────────────────────────────────
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+}
+
+function formatTime() {
+  const now = new Date();
+  return now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+}
+
+function formatDate(isoString) {
+  const date = new Date(isoString);
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  
+  if (date.toDateString() === today.toDateString()) return 'Today';
+  if (date.toDateString() === yesterday.toDateString()) return 'Yesterday';
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function toast(msg, type) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = msg;
+  toast.style.borderColor = type === 'success' ? 'var(--green)' : type === 'error' ? 'var(--red)' : 'var(--gold)';
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+</script>
+
+</body>
+</html>
